@@ -2,43 +2,43 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
 
 ---
 
-## 📁 Epic: Project scaffolding & build
+## 📁 Epic: Project scaffolding & build (Setup)
 
-- [ ] Create root directory for the project  
-- [ ] Inside root, create `src/` and `include/` folders  
-- [ ] Add a top‑level `Makefile`  
+- [x] Create root directory for the project  
+- [x] Inside root, create `src/` and `include/` folders  
+- [x] Add a top‑level `Makefile`  
 
 **Makefile tasks**  
-- [ ] Define `CC = gcc`  
-- [ ] Define `CFLAGS = -Wall -Wextra -I include -std=c11`  
-- [ ] Define `LDFLAGS = -pthread`  
-- [ ] List `SRC = src/main.c src/sort.c src/file_utils.c src/sync.c`  
-- [ ] Compute `OBJ = $(SRC:.c=.o)`  
-- [ ] Add target  
+- [x] Define `CC = gcc`  
+- [x] Define `CFLAGS = -Wall -Wextra -I include -std=c11`  
+- [x] Define `LDFLAGS = -pthread`  
+- [x] List `SRC = src/main.c src/sort.c src/file_utils.c src/sync.c`  
+- [x] Compute `OBJ = $(SRC:.c=.o)`  
+- [x] Add target  
   ```Makefile
   sss: $(OBJ)
       $(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
   ```  
-- [ ] Add pattern rule  
+- [x] Add pattern rule  
   ```Makefile
   %.o: %.c
       $(CC) $(CFLAGS) -c $< -o $@
   ```  
-- [ ] Add `clean` target to remove `$(OBJ)` and the `sss` binary  
+- [x] Add `clean` target to remove `$(OBJ)` and the `sss` binary  
 
 ---
 
-## 🔒 Epic: Synchronization primitives
+## 🔒 Epic: Synchronization primitives (Task 1)
 
 ### include/sync.h  
-- [ ] Add include guard `#ifndef SYNC_H / #define SYNC_H / #endif`  
-- [ ] `#include <pthread.h>` and `<stdbool.h>`  
-- [ ] Define macros:
+- [x] Add include guard `#ifndef SYNC_H / #define SYNC_H / #endif`  
+- [x] `#include <pthread.h>` and `<stdbool.h>`  
+- [x] Define macros:
   ```c
   #define T1_ID 1
   #define T2_ID 2
   ```
-- [ ] Declare shared state:
+- [x] Declare shared state:
   ```c
   extern int turn;
   extern bool no_swap_t1, no_swap_t2;
@@ -47,16 +47,16 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
   extern long swap_count;
   extern pthread_mutex_t swap_mutex;
   ```
-- [ ] Define thread‑arg struct:
+- [x] Define thread‑arg struct:
   ```c
   typedef struct { int thread_id; } ThreadArgs;
   ```
-- [ ] Declare `void init_sync(void);`  
-- [ ] Declare `void destroy_sync(void);`  
+- [x] Declare `void init_sync(void);`  
+- [x] Declare `void destroy_sync(void);`  
 
 ### src/sync.c  
-- [ ] `#include "sync.h"`  
-- [ ] Define all externs:
+- [x] `#include "sync.h"`  
+- [x] Define all externs:
   ```c
   int turn;
   bool no_swap_t1, no_swap_t2;
@@ -65,80 +65,80 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
   long swap_count;
   pthread_mutex_t swap_mutex;
   ```
-- [ ] Implement `init_sync()`:
-  - [ ] `pthread_mutex_init(&cond_mutex, NULL);`
-  - [ ] `pthread_cond_init(&cond_t1, NULL);`
-  - [ ] `pthread_cond_init(&cond_t2, NULL);`
-  - [ ] `pthread_mutex_init(&swap_mutex, NULL);`
-  - [ ] `turn = T1_ID;`
-  - [ ] `no_swap_t1 = no_swap_t2 = false;`
-  - [ ] `swap_count = 0;`
-- [ ] Implement `destroy_sync()`:
-  - [ ] `pthread_mutex_destroy(&cond_mutex);`
-  - [ ] `pthread_cond_destroy(&cond_t1);`
-  - [ ] `pthread_cond_destroy(&cond_t2);`
-  - [ ] `pthread_mutex_destroy(&swap_mutex);`
+- [x] Implement `init_sync()`:
+  - [x] `pthread_mutex_init(&cond_mutex, NULL);`
+  - [x] `pthread_cond_init(&cond_t1, NULL);`
+  - [x] `pthread_cond_init(&cond_t2, NULL);`
+  - [x] `pthread_mutex_init(&swap_mutex, NULL);`
+  - [x] `turn = T1_ID;`
+  - [x] `no_swap_t1 = no_swap_t2 = false;`
+  - [x] `swap_count = 0;`
+- [x] Implement `destroy_sync()`:
+  - [x] `pthread_mutex_destroy(&cond_mutex);`
+  - [x] `pthread_cond_destroy(&cond_t1);`
+  - [x] `pthread_cond_destroy(&cond_t2);`
+  - [x] `pthread_mutex_destroy(&swap_mutex);`
 
 ---
 
-## 📂 Epic: File I/O helper
+## 📂 Epic: File I/O helper (Task 2)
 
 ### include/file_utils.h  
-- [ ] Add include guard `#ifndef FILE_UTILS_H / #define FILE_UTILS_H / #endif`  
-- [ ] Declare:
+- [x] Add include guard `#ifndef FILE_UTILS_H / #define FILE_UTILS_H / #endif`  
+- [x] Declare:
   ```c
   int *read_input(const char *filename, int *out_n);
   ```
 
 ### src/file_utils.c  
-- [ ] `#include <stdio.h>`, `<stdlib.h>`, `<string.h>`, `"file_utils.h"`  
-- [ ] Implement `read_input()`:
-  - [ ] `FILE *fp = fopen(filename, "r");` → check `fp == NULL` → return `NULL`
-  - [ ] Declare `int buffer[200]` and `int count = 0;`
-  - [ ] Loop: `while (count < 200 && fscanf(fp, "%d", &buffer[count]) == 1) count++;`
-  - [ ] `fclose(fp);`
-  - [ ] `int *arr = malloc(count * sizeof(int));` → check `arr == NULL` → return `NULL`
-  - [ ] `memcpy(arr, buffer, count * sizeof(int));`
-  - [ ] `*out_n = count;`
-  - [ ] `return arr;`
+- [x] `#include <stdio.h>`, `<stdlib.h>`, `<string.h>`, `"file_utils.h"`  
+- [x] Implement `read_input()`:
+  - [x] `FILE *fp = fopen(filename, "r");` → check `fp == NULL` → return `NULL`
+  - [x] Declare `int buffer[200]` and `int count = 0;`
+  - [x] Loop: `while (count < 200 && fscanf(fp, "%d", &buffer[count]) == 1) count++;`
+  - [x] `fclose(fp);`
+  - [x] `int *arr = malloc(count * sizeof(int));` → check `arr == NULL` → return `NULL`
+  - [x] `memcpy(arr, buffer, count * sizeof(int));`
+  - [x] `*out_n = count;`
+  - [x] `return arr;`
 
 ---
 
-## 🔢 Epic: Sorting thread logic
+## 🔢 Epic: Sorting thread logic (Task 3)
 
 ### include/sort.h  
-- [ ] Add include guard `#ifndef SORT_H / #define SORT_H / #endif`  
-- [ ] `#include "sync.h"`  
-- [ ] Declare shared globals:
+- [x] Add include guard `#ifndef SORT_H / #define SORT_H / #endif`  
+- [x] `#include "sync.h"`  
+- [x] Declare shared globals:
   ```c
   extern int *A;
   extern int n;
   ```
-- [ ] Declare:
+- [x] Declare:
   ```c
   void *sort(void *arg);
   ```
 
 ### src/sort.c  
-- [ ] `#include <pthread.h>`, `<stdbool.h>`, `"sync.h"`, `"sort.h"`  
-- [ ] At top of `sort()`, declare `int thread_swaps = 0;`  
-- [ ] Inside `void *sort(void *arg)`:
-  - [ ] Cast `ThreadArgs *targs = arg;`
-  - [ ] `int id = targs->thread_id;`
-  - [ ] Setup pointers:
+- [x] `#include <pthread.h>`, `<stdbool.h>`, `"sync.h"`, `"sort.h"`  
+- [x] At top of `sort()`, declare `int thread_swaps = 0;`  
+- [x] Inside `void *sort(void *arg)`:
+  - [x] Cast `ThreadArgs *targs = arg;`
+  - [x] `int id = targs->thread_id;`
+  - [x] Setup pointers:
     ```c
     bool *my_no_swap    = (id==T1_ID ? &no_swap_t1 : &no_swap_t2);
     bool *other_no_swap = (id==T1_ID ? &no_swap_t2 : &no_swap_t1);
     pthread_cond_t *my_cond    = (id==T1_ID ? &cond_t1 : &cond_t2);
     pthread_cond_t *other_cond = (id==T1_ID ? &cond_t2 : &cond_t1);
     ```
-  - [ ] `while (true) {`
-    - [ ] `pthread_mutex_lock(&cond_mutex);`
-    - [ ] `while (turn != id) pthread_cond_wait(my_cond, &cond_mutex);`
-    - [ ] `pthread_mutex_unlock(&cond_mutex);`
-    - [ ] `int local_swaps = 0;`
-    - [ ] `int start = (id==T1_ID ? 0 : 1);`
-    - [ ] Loop over pairs:
+  - [x] `while (true) {`
+    - [x] `pthread_mutex_lock(&cond_mutex);`
+    - [x] `while (turn != id) pthread_cond_wait(my_cond, &cond_mutex);`
+    - [x] `pthread_mutex_unlock(&cond_mutex);`
+    - [x] `int local_swaps = 0;`
+    - [x] `int start = (id==T1_ID ? 0 : 1);`
+    - [x] Loop over pairs:
       ```c
       for (int i = start; i+1 < n; i += 2) {
           if (A[i] > A[i+1]) {
@@ -147,71 +147,71 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
           }
       }
       ```
-    - [ ] `pthread_mutex_lock(&swap_mutex);`
-    - [ ] `swap_count += local_swaps;`
-    - [ ] `pthread_mutex_unlock(&swap_mutex);`
-    - [ ] `thread_swaps += local_swaps;`
-    - [ ] `pthread_mutex_lock(&cond_mutex);`
-    - [ ] `*my_no_swap = (local_swaps == 0);`
-    - [ ] Termination check:
-      - [ ] If `*my_no_swap && *other_no_swap`:
-        - [ ] `turn = (id==T1_ID ? T2_ID : T1_ID);`
-        - [ ] `pthread_cond_signal(other_cond);`
-        - [ ] Print thread summary:
+    - [x] `pthread_mutex_lock(&swap_mutex);`
+    - [x] `swap_count += local_swaps;`
+    - [x] `pthread_mutex_unlock(&swap_mutex);`
+    - [x] `thread_swaps += local_swaps;`
+    - [x] `pthread_mutex_lock(&cond_mutex);`
+    - [x] `*my_no_swap = (local_swaps == 0);`
+    - [x] Termination check:
+      - [x] If `*my_no_swap && *other_no_swap`:
+        - [x] `turn = (id==T1_ID ? T2_ID : T1_ID);`
+        - [x] `pthread_cond_signal(other_cond);`
+        - [x] Print thread summary:
           ```c
           printf("Thread %d: total number of swaps = %d\n", id, thread_swaps);
           ```
-        - [ ] `pthread_mutex_unlock(&cond_mutex);`
-        - [ ] `break;`
-    - [ ] Else pass control:
-      - [ ] `turn = (id==T1_ID ? T2_ID : T1_ID);`
-      - [ ] `pthread_cond_signal(other_cond);`
-      - [ ] `pthread_mutex_unlock(&cond_mutex);`
-  - [ ] `}` (end while)
-  - [ ] `return NULL;`
+        - [x] `pthread_mutex_unlock(&cond_mutex);`
+        - [x] `break;`
+    - [x] Else pass control:
+      - [x] `turn = (id==T1_ID ? T2_ID : T1_ID);`
+      - [x] `pthread_cond_signal(other_cond);`
+      - [x] `pthread_mutex_unlock(&cond_mutex);`
+  - [x] `}` (end while)
+  - [x] `return NULL;`
 
 ---
 
-## 🎯 Epic: Main program orchestration
+## 🎯 Epic: Main program orchestration (Task 4)
 
 ### src/main.c  
-- [ ] `#include <stdio.h>`, `<stdlib.h>`, `<pthread.h>`, `"file_utils.h"`, `"sync.h"`, `"sort.h"`  
-- [ ] Define globals:
+- [x] `#include <stdio.h>`, `<stdlib.h>`, `<pthread.h>`, `"file_utils.h"`, `"sync.h"`, `"sort.h"`  
+- [x] Define globals:
   ```c
   int *A = NULL;
   int n    = 0;
   ```
-- [ ] `int main(int argc, char **argv) {`
-  - [ ] Check `argc != 2` → `fprintf(stderr, "Usage: %s ToSort\n", argv[0]); return EXIT_FAILURE;`
-  - [ ] `A = read_input(argv[1], &n);` → if `A == NULL` → `perror("read_input"); return EXIT_FAILURE;`
-  - [ ] `init_sync();`
-  - [ ] Declare `pthread_t th1, th2;`
-  - [ ] Declare and init args:
+- [x] `int main(int argc, char **argv) {`
+  - [x] Check `argc != 2` → `fprintf(stderr, "Usage: %s ToSort\n", argv[0]); return EXIT_FAILURE;`
+  - [x] `A = read_input(argv[1], &n);` → if `A == NULL` → `perror("read_input"); return EXIT_FAILURE;`
+  - [x] `init_sync();`
+  - [x] Declare `pthread_t th1, th2;`
+  - [x] Declare and init args:
     ```c
     ThreadArgs t1_args = { .thread_id = T1_ID };
     ThreadArgs t2_args = { .thread_id = T2_ID };
     ```
-  - [ ] `if (pthread_create(&th1, NULL, sort, &t1_args) != 0) { perror("pthread_create"); exit(EXIT_FAILURE); }`
-  - [ ] `if (pthread_create(&th2, NULL, sort, &t2_args) != 0) { perror("pthread_create"); exit(EXIT_FAILURE); }`
-  - [ ] `if (pthread_join(th1, NULL) != 0) { perror("pthread_join"); exit(EXIT_FAILURE); }`
-  - [ ] `if (pthread_join(th2, NULL) != 0) { perror("pthread_join"); exit(EXIT_FAILURE); }`
-  - [ ] Print sorted array:
+  - [x] `if (pthread_create(&th1, NULL, sort, &t1_args) != 0) { perror("pthread_create"); exit(EXIT_FAILURE); }`
+  - [x] `if (pthread_create(&th2, NULL, sort, &t2_args) != 0) { perror("pthread_create"); exit(EXIT_FAILURE); }`
+  - [x] `if (pthread_join(th1, NULL) != 0) { perror("pthread_join"); exit(EXIT_FAILURE); }`
+  - [x] `if (pthread_join(th2, NULL) != 0) { perror("pthread_join"); exit(EXIT_FAILURE); }`
+  - [x] Print sorted array:
     ```c
     for (int i = 0; i < n; i++) printf("%d ", A[i]);
     printf("\n");
     ```
-  - [ ] Print total swaps:
+  - [x] Print total swaps:
     ```c
     printf("Total number of swaps to sort array A = %ld.\n", swap_count);
     ```
-  - [ ] `destroy_sync();`
-  - [ ] `free(A);`
-  - [ ] `return EXIT_SUCCESS;`
-- [ ] Add file‑ and function‑level comments explaining flow  
+  - [x] `destroy_sync();`
+  - [x] `free(A);`
+  - [x] `return EXIT_SUCCESS;`
+- [x] Add file‑ and function‑level comments explaining flow  
 
 ---
 
-## ✅ Epic: Testing & verification
+## ✅ Epic: Testing & verification (Task 5)
 
 - [ ] Create sample input file `sample1.txt` with the 15‑element example  
 - [ ] Create edge‑case file `empty.txt` (0 integers)  
@@ -223,7 +223,7 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
 
 ---
 
-## 📚 Epic: Documentation & README
+## 📚 Epic: Documentation & README (Task 6)
 
 - [ ] Create `README.md` in project root  
 - [ ] Write **Project Overview** summarizing purpose and threads  
