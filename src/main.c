@@ -23,7 +23,7 @@ int n = 0;
 int main(int argc, char **argv) {
     // Check for the correct number of arguments
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s ToSort\n", argv[0]);
+        fprintf(stderr, "Usage: %s <file containing numbers to be sorted>\n", argv[0]);
         return EXIT_FAILURE;
     }
     
