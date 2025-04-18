@@ -1,0 +1,25 @@
+# Ignore compiled files
+*.class
+*.pyc
+*.log
+
+# Ignore build artifacts
+*.jar
+target/
+dist/
+
+# Ignore IDE and editor files
+*.swp
+*.swo
+*.swn
+*.DS_Store
+*.idea/
+.vscode/
+
+# Ignore large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
