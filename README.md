@@ -1,0 +1,64 @@
+# Shared Sort Simulator (sss)
+
+## Project Overview
+
+This program implements a simple sorting algorithm using two concurrent threads. The algorithm works as follows:
+
+- Thread T1 compares and swaps pairs of integers at positions A[2i] and A[2i+1]
+- Thread T2 compares and swaps pairs of integers at positions A[2i-1] and A[2i]
+- The threads strictly alternate, with T1 always executing first in each iteration
+- Both threads terminate when no swaps occur in consecutive passes by both threads
+
+This implementation demonstrates the use of POSIX threads, mutexes, and condition variables for thread synchronization. The shared array and swap counter are protected with appropriate mutual exclusion mechanisms.
+
+## Build Instructions
+
+```
+make
+```
+
+## Run Instructions
+
+```
+./sss ToSort
+```
+
+Where `ToSort` is a file containing integers separated by whitespace.
+
+## Dependencies
+
+- GCC 9 or higher (with C11 support)
+- POSIX threads library
+
+## Design
+
+### Thread Alternation
+
+The program implements strict alternation between the two threads using:
+- A shared `turn` variable to track which thread can execute
+- Two condition variables (`cond_t1`, `cond_t2`) for thread signaling
+- A mutex (`cond_mutex`) to protect access to shared synchronization variables
+
+### Shared Swap Counter
+
+The total number of swaps is tracked in a shared variable protected by:
+- A separate mutex (`swap_mutex`) to prevent race conditions when updating
+- Each thread maintains a local counter for its own swaps before updating the shared count
+
+### Termination Condition
+
+The threads terminate when:
+- Both threads have consecutive passes with no swaps
+- This is tracked through the `no_swap_t1` and `no_swap_t2` flags
+- When both flags are true, both threads print their individual swap counts and terminate
+
+## Known Limitations
+
+- Maximum input size is 200 integers
+- Requires C11 standard support
+- Assumes input file contains only valid integers
+
+## Author
+
+Student Name
+Student ID Number
