@@ -213,13 +213,13 @@ Below is an exhaustive, one‑story‑point checklist—grouped into epics—tha
 
 ## ✅ Epic: Testing & verification (Task 5)
 
-- [ ] Create sample input file `sample1.txt` with the 15‑element example  
-- [ ] Create edge‑case file `empty.txt` (0 integers)  
-- [ ] Create edge‑case file `one.txt` (1 integer)  
-- [ ] Create `max200.txt` with 200 integers  
-- [ ] Run `./sss sample1.txt` → compare output to expected sorted array and swap count (29)  
-- [ ] Run with each edge case → ensure no crashes, correct behavior  
-- [ ] Introduce deliberate malformed input (non‑integer) → verify graceful failure or ignore  
+- [x] Create sample input file `sample1.txt` with the 15‑element example  
+- [x] Create edge‑case file `empty.txt` (0 integers)  
+- [x] Create edge‑case file `one.txt` (1 integer)  
+- [x] Create `max200.txt` with 200 integers  
+- [x] Run `./sss sample1.txt` → compare output to expected sorted array and swap count (29)  
+- [x] Run with each edge case → ensure no crashes, correct behavior  
+- [x] Introduce deliberate malformed input (non‑integer) → verify graceful failure or ignore  
 
 ---
 
