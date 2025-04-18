@@ -23,3 +23,8 @@ dist/
 *.flv
 *.mov
 *.wmv
+
+# make
+sss
+*.o
+*.a
