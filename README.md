@@ -25,6 +25,27 @@ make
 
 Where `ToSort` is a file containing integers separated by whitespace.
 
+## Memory Leak Detection
+
+To check for memory leaks, you can use the Valgrind target:
+
+```
+make valgrind
+```
+
+This will run the program through Valgrind with the following settings:
+- Full leak checking
+- Display all types of memory leaks
+- Track origins of uninitialized values
+- Verbose output
+
+Alternatively, you can run a specific file through Valgrind:
+
+```
+make
+valgrind --leak-check=full ./sss ToSort
+```
+
 ## Dependencies
 
 - GCC 9 or higher (with C11 support)
@@ -60,5 +81,6 @@ The threads terminate when:
 
 ## Author
 
-Student Name
-Student ID Number
+Name: Haikal Putryaudha
+Student ID Number: 21604483
+Email: 21604483@student.curtin.edu.au
