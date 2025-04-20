@@ -16,15 +16,6 @@ dist/
 *.idea/
 .vscode/
 
-# Ignore large media files
-*.mp4
-*.tiff
-*.avi
-*.flv
-*.mov
-*.wmv
-
-# make
+# C build files
 sss
 *.o
-*.a
