@@ -1,4 +1,4 @@
-# Shared Sort Simulator (sss)
+# OS Assignment 1 - Shared Sort Simulator (sss)
 
 ## Project Overview
 
@@ -20,8 +20,10 @@ make
 ## Run Instructions
 
 ```
-./sss ToSort
+./sss <file.txt>
 ```
+
+Where `<file.txt>` is the input file containing integers to be sorted. The program will read the integers from the file, sort them using the shared sort algorithm, and print the sorted array along with the number of swaps performed by each thread.
 
 Where `ToSort` is a file containing integers separated by whitespace.
 
@@ -38,12 +40,24 @@ This will run the program through Valgrind with the following settings:
 - Display all types of memory leaks
 - Track origins of uninitialized values
 - Verbose output
+- Uses sample1.txt as default input file
+
+You can also specify a different input file:
+
+```
+make valgrind INPUT=<file.txt>
+```
 
 Alternatively, you can run a specific file through Valgrind:
 
 ```
 make
-valgrind --leak-check=full ./sss ToSort
+valgrind --leak-check=full ./sss <file.txt>
+```
+
+## Clean build
+```
+make clean
 ```
 
 ## Dependencies
