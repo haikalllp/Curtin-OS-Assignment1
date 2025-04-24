@@ -8,21 +8,21 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-#define T1_ID 1
-#define T2_ID 2
+#define THREAD_ONE_ID 1
+#define THREAD_TWO_ID 2
 
-extern int turn;
-extern bool no_swap_t1, no_swap_t2;
-extern pthread_mutex_t cond_mutex;
-extern pthread_cond_t cond_t1, cond_t2;
-extern long swap_count;
-extern pthread_mutex_t swap_mutex;
+extern int threadTurn;
+extern bool noSwapThread1, noSwapThread2;
+extern pthread_mutex_t conditionMutex;
+extern pthread_cond_t conditionThread1, conditionThread2;
+extern long swapCount;
+extern pthread_mutex_t swapMutex;
 
 typedef struct {
-    int thread_id;
+    int threadId;
 } ThreadArgs;
 
-void init_sync(void);
-void destroy_sync(void);
+void initSynchronization(void);
+void destroySynchronization(void);
 
 #endif /* SYNC_H */

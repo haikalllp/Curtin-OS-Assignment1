@@ -7,15 +7,15 @@
 
 #include "sync.h"
 
-extern int *A;
-extern int n;
+extern int *sortArray;
+extern int arraySize;
 
 /**
  * Thread function that performs the sorting operation
  * 
- * @param arg Pointer to ThreadArgs struct containing thread_id
+ * @param arg Pointer to ThreadArgs struct containing threadId
  * @return NULL
  */
-void *sort(void *arg);
+void *performSort(void *arg);
 
 #endif /* SORT_H */

@@ -14,68 +14,68 @@
 /**
  * Thread function that performs the sorting operation
  * 
- * @param arg Pointer to ThreadArgs struct containing thread_id
+ * @param arg Pointer to ThreadArgs struct containing threadId
  * @return NULL
  */
-void *sort(void *arg) {
-    int thread_swaps = 0;
-    ThreadArgs *targs = (ThreadArgs *)arg;
-    int id = targs->thread_id;
+void *performSort(void *arg) {
+    int threadSwaps = 0;
+    ThreadArgs *threadArgs = (ThreadArgs *)arg;
+    int id = threadArgs->threadId;
     
     /* Setup pointers based on thread ID for easier access */
-    bool *my_no_swap = (id == T1_ID ? &no_swap_t1 : &no_swap_t2);
-    bool *other_no_swap = (id == T1_ID ? &no_swap_t2 : &no_swap_t1);
-    pthread_cond_t *my_cond = (id == T1_ID ? &cond_t1 : &cond_t2);
-    pthread_cond_t *other_cond = (id == T1_ID ? &cond_t2 : &cond_t1);
+    bool *myNoSwap = (id == THREAD_ONE_ID ? &noSwapThread1 : &noSwapThread2);
+    bool *otherNoSwap = (id == THREAD_ONE_ID ? &noSwapThread2 : &noSwapThread1);
+    pthread_cond_t *myCondition = (id == THREAD_ONE_ID ? &conditionThread1 : &conditionThread2);
+    pthread_cond_t *otherCondition = (id == THREAD_ONE_ID ? &conditionThread2 : &conditionThread1);
     
     while (true) {
-        int local_swaps;
-        int start;
+        int localSwaps;
+        int startIndex;
         int i;
         
-        pthread_mutex_lock(&cond_mutex);
-        while (turn != id) {
-            pthread_cond_wait(my_cond, &cond_mutex);
+        pthread_mutex_lock(&conditionMutex);
+        while (threadTurn != id) {
+            pthread_cond_wait(myCondition, &conditionMutex);
         }
-        pthread_mutex_unlock(&cond_mutex);
+        pthread_mutex_unlock(&conditionMutex);
         
-        local_swaps = 0;
-        start = (id == T1_ID ? 0 : 1);
+        localSwaps = 0;
+        startIndex = (id == THREAD_ONE_ID ? 0 : 1);
         
         /* Process pairs based on thread ID */
-        for (i = start; i + 1 < n; i += 2) {
-            if (A[i] > A[i + 1]) {
-                int tmp = A[i];
-                A[i] = A[i + 1];
-                A[i + 1] = tmp;
-                local_swaps++;
+        for (i = startIndex; i + 1 < arraySize; i += 2) {
+            if (sortArray[i] > sortArray[i + 1]) {
+                int temp = sortArray[i];
+                sortArray[i] = sortArray[i + 1];
+                sortArray[i + 1] = temp;
+                localSwaps++;
             }
         }
         
         /* Update global swap count */
-        pthread_mutex_lock(&swap_mutex);
-        swap_count += local_swaps;
-        pthread_mutex_unlock(&swap_mutex);
+        pthread_mutex_lock(&swapMutex);
+        swapCount += localSwaps;
+        pthread_mutex_unlock(&swapMutex);
         
         /* Update thread's total swaps */
-        thread_swaps += local_swaps;
+        threadSwaps += localSwaps;
         
-        pthread_mutex_lock(&cond_mutex);
-        *my_no_swap = (local_swaps == 0);
+        pthread_mutex_lock(&conditionMutex);
+        *myNoSwap = (localSwaps == 0);
         
         /* Check termination condition */
-        if (*my_no_swap && *other_no_swap) {
-            turn = (id == T1_ID ? T2_ID : T1_ID);
-            pthread_cond_signal(other_cond);
-            printf("Thread %d: total number of swaps = %d\n", id, thread_swaps);
-            pthread_mutex_unlock(&cond_mutex);
+        if (*myNoSwap && *otherNoSwap) {
+            threadTurn = (id == THREAD_ONE_ID ? THREAD_TWO_ID : THREAD_ONE_ID);
+            pthread_cond_signal(otherCondition);
+            printf("Thread %d: total number of swaps = %d\n", id, threadSwaps);
+            pthread_mutex_unlock(&conditionMutex);
             break;
         }
         
         /* Pass control to the other thread */
-        turn = (id == T1_ID ? T2_ID : T1_ID);
-        pthread_cond_signal(other_cond);
-        pthread_mutex_unlock(&cond_mutex);
+        threadTurn = (id == THREAD_ONE_ID ? THREAD_TWO_ID : THREAD_ONE_ID);
+        pthread_cond_signal(otherCondition);
+        pthread_mutex_unlock(&conditionMutex);
     }
     
     return NULL;

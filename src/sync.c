@@ -6,38 +6,38 @@
 #include "sync.h"
 
 /* Shared state variables */
-int turn;
-bool no_swap_t1, no_swap_t2;
-pthread_mutex_t cond_mutex;
-pthread_cond_t cond_t1, cond_t2;
-long swap_count;
-pthread_mutex_t swap_mutex;
+int threadTurn;
+bool noSwapThread1, noSwapThread2;
+pthread_mutex_t conditionMutex;
+pthread_cond_t conditionThread1, conditionThread2;
+long swapCount;
+pthread_mutex_t swapMutex;
 
-/* Define boolean type since ansi C doesn't have stdbool.h */
+/* Define boolean type */
 #define true 1
 #define false 0
 
 /**
  * Initialize all synchronization primitives
  */
-void init_sync(void) {
-    pthread_mutex_init(&cond_mutex, NULL);
-    pthread_cond_init(&cond_t1, NULL);
-    pthread_cond_init(&cond_t2, NULL);
-    pthread_mutex_init(&swap_mutex, NULL);
+void initSynchronization(void) {
+    pthread_mutex_init(&conditionMutex, NULL);
+    pthread_cond_init(&conditionThread1, NULL);
+    pthread_cond_init(&conditionThread2, NULL);
+    pthread_mutex_init(&swapMutex, NULL);
     
-    /* Initialize turn to T1 and set no-swap flags to false */
-    turn = T1_ID;
-    no_swap_t1 = no_swap_t2 = false;
-    swap_count = 0;
+    /* Initialize turn to Thread 1 and set no-swap flags to false */
+    threadTurn = THREAD_ONE_ID;
+    noSwapThread1 = noSwapThread2 = false;
+    swapCount = 0;
 }
 
 /**
  * Destroy all synchronization primitives
  */
-void destroy_sync(void) {
-    pthread_mutex_destroy(&cond_mutex);
-    pthread_cond_destroy(&cond_t1);
-    pthread_cond_destroy(&cond_t2);
-    pthread_mutex_destroy(&swap_mutex);
+void destroySynchronization(void) {
+    pthread_mutex_destroy(&conditionMutex);
+    pthread_cond_destroy(&conditionThread1);
+    pthread_cond_destroy(&conditionThread2);
+    pthread_mutex_destroy(&swapMutex);
 }

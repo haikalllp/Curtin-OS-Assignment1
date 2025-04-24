@@ -10,8 +10,8 @@
 #include "sort.h"
 
 /* Global variables for the array and its size */
-int *A = NULL;
-int n = 0;
+int *sortArray = NULL;
+int arraySize = 0;
 
 /**
  * Main entry point for the sss program
@@ -22,10 +22,10 @@ int n = 0;
  */
 int main(int argc, char **argv) {
     /* Variable declarations at the beginning of the function */
-    pthread_t th1, th2;
-    ThreadArgs t1_args;
-    ThreadArgs t2_args;
-    int i;
+    pthread_t thread1, thread2;
+    ThreadArgs thread1Args;
+    ThreadArgs thread2Args;
+    int index;
     
     /* Check for the correct number of arguments */
     if (argc != 2) {
@@ -34,62 +34,62 @@ int main(int argc, char **argv) {
     }
     
     /* Read input from file */
-    A = read_input(argv[1], &n);
-    if (A == NULL) {
-        perror("read_input");
+    sortArray = readInputFile(argv[1], &arraySize);
+    if (sortArray == NULL) {
+        perror("readInputFile");
         return EXIT_FAILURE;
     }
     
     /* Initialize synchronization primitives */
-    init_sync();
+    initSynchronization();
     
     /* Initialize thread arguments */
-    t1_args.thread_id = T1_ID;
-    t2_args.thread_id = T2_ID;
+    thread1Args.threadId = THREAD_ONE_ID;
+    thread2Args.threadId = THREAD_TWO_ID;
     
     /* Create and start Thread 1 */
-    if (pthread_create(&th1, NULL, sort, &t1_args) != 0) {
+    if (pthread_create(&thread1, NULL, performSort, &thread1Args) != 0) {
         perror("pthread_create");
-        free(A);
-        destroy_sync();
+        free(sortArray);
+        destroySynchronization();
         exit(EXIT_FAILURE);
     }
     
     /* Create and start Thread 2 */
-    if (pthread_create(&th2, NULL, sort, &t2_args) != 0) {
+    if (pthread_create(&thread2, NULL, performSort, &thread2Args) != 0) {
         perror("pthread_create");
-        free(A);
-        destroy_sync();
+        free(sortArray);
+        destroySynchronization();
         exit(EXIT_FAILURE);
     }
     
     /* Wait for threads to finish */
-    if (pthread_join(th1, NULL) != 0) {
+    if (pthread_join(thread1, NULL) != 0) {
         perror("pthread_join");
-        free(A);
-        destroy_sync();
+        free(sortArray);
+        destroySynchronization();
         exit(EXIT_FAILURE);
     }
     
-    if (pthread_join(th2, NULL) != 0) {
+    if (pthread_join(thread2, NULL) != 0) {
         perror("pthread_join");
-        free(A);
-        destroy_sync();
+        free(sortArray);
+        destroySynchronization();
         exit(EXIT_FAILURE);
     }
     
     /* Print the sorted array */
-    for (i = 0; i < n; i++) {
-        printf("%d ", A[i]);
+    for (index = 0; index < arraySize; index++) {
+        printf("%d ", sortArray[index]);
     }
     printf("\n");
     
     /* Print the total number of swaps */
-    printf("Total number of swaps to sort array A = %ld.\n", swap_count);
+    printf("Total number of swaps to sort array sortArray = %ld.\n", swapCount);
     
     /* Clean up resources */
-    destroy_sync();
-    free(A);
+    destroySynchronization();
+    free(sortArray);
     
     return EXIT_SUCCESS;
 }
