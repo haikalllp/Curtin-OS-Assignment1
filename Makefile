@@ -4,7 +4,7 @@ LDFLAGS = -pthread
 SRC = src/main.c src/sort.c src/fileHandling.c src/sync.c
 OBJ = $(SRC:.c=.o)
 # To use sample input file when running with Valgrind, file can be changed below:
-INPUT = sample1.txt
+INPUT = ToSort.txt
 
 sss: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
