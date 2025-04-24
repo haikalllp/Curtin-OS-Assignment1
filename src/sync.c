@@ -2,15 +2,20 @@
  * sync.c - Implementation of synchronization primitives for sss
  */
 
+#include <stdbool.h>
 #include "sync.h"
 
-// Shared state variables
+/* Shared state variables */
 int turn;
 bool no_swap_t1, no_swap_t2;
 pthread_mutex_t cond_mutex;
 pthread_cond_t cond_t1, cond_t2;
 long swap_count;
 pthread_mutex_t swap_mutex;
+
+/* Define boolean type since ansi C doesn't have stdbool.h */
+#define true 1
+#define false 0
 
 /**
  * Initialize all synchronization primitives
@@ -21,7 +26,7 @@ void init_sync(void) {
     pthread_cond_init(&cond_t2, NULL);
     pthread_mutex_init(&swap_mutex, NULL);
     
-    // Initialize turn to T1 and set no-swap flags to false
+    /* Initialize turn to T1 and set no-swap flags to false */
     turn = T1_ID;
     no_swap_t1 = no_swap_t2 = false;
     swap_count = 0;

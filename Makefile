@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS = -ansi -pedantic -Wall -Werror -g -Wextra -I include -std=c11
+CFLAGS = -ansi -pedantic -Wall -Werror -g -Wextra -I include -std=c89
 LDFLAGS = -pthread
-SRC = src/main.c src/sort.c src/file_utils.c src/sync.c
+SRC = src/main.c src/sort.c src/fileHandling.c src/sync.c
 OBJ = $(SRC:.c=.o)
 # To use sample input file when running with Valgrind, file can be changed below:
 INPUT = sample1.txt

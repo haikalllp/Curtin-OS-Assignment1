@@ -1,9 +1,9 @@
 /**
- * file_utils.h - File handling utilities for the sss multi-threaded sorting program
+ * fileHandling.h - File handling utilities for the sss multi-threaded sorting program
  */
 
-#ifndef FILE_UTILS_H
-#define FILE_UTILS_H
+#ifndef FILE_HANDLING_H
+#define FILE_HANDLING_H
 
 /**
  * Reads integers from a file and returns them as a dynamically allocated array
@@ -14,4 +14,4 @@
  */
 int *read_input(const char *filename, int *out_n);
 
-#endif /* FILE_UTILS_H */
+#endif /* FILE_HANDLING_H */
