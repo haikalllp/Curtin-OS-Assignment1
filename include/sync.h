@@ -15,7 +15,7 @@ extern int threadTurn;
 extern bool noSwapThread1, noSwapThread2;
 extern pthread_mutex_t conditionMutex;
 extern pthread_cond_t conditionThread1, conditionThread2;
-extern long swapCount;
+extern int swapCount;
 extern pthread_mutex_t swapMutex;
 
 typedef struct {

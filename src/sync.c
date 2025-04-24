@@ -10,7 +10,7 @@ int threadTurn;
 bool noSwapThread1, noSwapThread2;
 pthread_mutex_t conditionMutex;
 pthread_cond_t conditionThread1, conditionThread2;
-long swapCount;
+int swapCount;
 pthread_mutex_t swapMutex;
 
 /* Define boolean type */

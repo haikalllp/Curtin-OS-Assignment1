@@ -13,6 +13,12 @@
 int *sortArray = NULL;
 int arraySize = 0;
 
+/* External declarations for thread output variables */
+extern int thread1Swaps;
+extern int thread2Swaps;
+extern int threadsFinished;
+extern pthread_mutex_t outputMutex;
+
 /**
  * Main entry point for the sss program
  * 
@@ -78,14 +84,22 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
     
-    /* Print the sorted array */
-    for (index = 0; index < arraySize; index++) {
-        printf("%d ", sortArray[index]);
-    }
-    printf("\n");
+    /* Print thread statistics in the correct order */
+    printf("Thread 1: total number of swaps = %d\n", thread1Swaps);
+    printf("Thread 2: total number of swaps = %d\n", thread2Swaps);
     
-    /* Print the total number of swaps */
-    printf("Total number of swaps to sort array sortArray = %ld.\n", swapCount);
+    /* Print the sorted array */
+    printf("A = (");
+    for (index = 0; index < arraySize; index++) {
+        printf("%d", sortArray[index]);
+        if (index < arraySize - 1) {
+            printf(", ");
+        }
+    }
+    printf(")\n");
+    
+    /* Print the total number of swaps with the new format */
+    printf("Total number of swaps to sort array A = %d.\n", swapCount);
     
     /* Clean up resources */
     destroySynchronization();

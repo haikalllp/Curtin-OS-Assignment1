@@ -11,6 +11,12 @@
 #define true 1
 #define false 0
 
+/* Thread message storage */
+int thread1Swaps = 0;
+int thread2Swaps = 0;
+int threadsFinished = 0;
+pthread_mutex_t outputMutex = PTHREAD_MUTEX_INITIALIZER;
+
 /**
  * Thread function that performs the sorting operation
  * 
@@ -67,7 +73,17 @@ void *performSort(void *arg) {
         if (*myNoSwap && *otherNoSwap) {
             threadTurn = (id == THREAD_ONE_ID ? THREAD_TWO_ID : THREAD_ONE_ID);
             pthread_cond_signal(otherCondition);
-            printf("Thread %d: total number of swaps = %d\n", id, threadSwaps);
+            
+            /* Store thread swaps to print in correct order later */
+            pthread_mutex_lock(&outputMutex);
+            if (id == THREAD_ONE_ID) {
+                thread1Swaps = threadSwaps;
+            } else {
+                thread2Swaps = threadSwaps;
+            }
+            threadsFinished++;
+            pthread_mutex_unlock(&outputMutex);
+            
             pthread_mutex_unlock(&conditionMutex);
             break;
         }
